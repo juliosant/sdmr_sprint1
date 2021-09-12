@@ -28,11 +28,17 @@
                 {{ call.recipient.last_name }}</h5>
         </a>
         {% elif call.status_service == '2' %}
-        Calma
+        <a href="{% url 'app_donation:confirm_donation' call.id %}" class="card mx-auto w-50 p-2 text-decoration-none" style="background-color: rgb(82, 236, 203);">
+            <h5 class="text-success">Doação está aguardando sua confirmação de materiais</h5>
+        </a>
         {% elif call.status_service == '3' %}
-        Calma
+        <a href="" class="card mx-auto w-50 p-2 text-decoration-none" style="background-color: rgb(236, 200, 82);">
+            <h5 class="text-success">Atendimento cancelado</h5>
+        </a>
         {% elif call.status_service == '4' %}
-        Calma
+        <a href="" class="card mx-auto w-50 p-2 text-decoration-none" style="background-color: rgb(82, 187, 129);">
+            <h5 class="text-light">Atendimento concluído</h5>
+        </a>
         {% endif %}
     {% endfor %}
 </div>

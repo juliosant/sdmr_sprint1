@@ -77,15 +77,47 @@
             </div>
         </div>
 
-        <div class="card-header border">
+        <!--div class="card-header border">
             <h2>Confirmação</h2>
         </div>
+        <div class="card-body row mx-auto">
+            <div class="col-md-12 ">
+                <h5 class="text-success fw-bold">Atendimento confirmado</h5>
+            </div>
+        </div-->
+
+        <div class="card-header border">
+            <h2>Registrar Materiais</h2>
+        </div>
         <div class="card-body row">
-            <div class="col-md-12 text-center">
-                <label class="h3">Confirmar:</label>
-                {{ ca_form.confirmed|f_class:'form-control w-25 mx-auto text-center' }}
+            {{ materials_form.management_form}}
+            {% for mf in materials_form %}
+            <div class="col-md-3 pb-2">
+                <label>Nome:</label>
+                {{ mf.material_name|f_class:'form-control' }}
+            </div>
+            <div class="col-md-3 pb-2">
+                <label>Tipo:</label>
+                {{ mf.material_type|f_class:'form-control' }}
+            </div>
+            <div class="col-md-2 pb-2">
+                <label>Qtd:</label>
+                {{ mf.amount|f_class:'form-control' }}
+            </div>
+            <div class="col-md-2 pb-2">
+                <label>Pts:</label>
+                {{ mf.points|f_class:'form-control' }}
+            </div>
+            <div class="col-md-1 pb-2">
+                <label></label>
+                <input type="button" class="btn btn-danger" value="Apagar">
+            </div>
+            {% endfor %}
+            <div class="col-md-6 pb-2 mx-auto text-center">
+                <input type="button" class="btn btn-success" value="Adicionar novo material">
             </div>
         </div>
+
     </div>
     <div class="card-body w-75 mx-auto ps-0">
         <a href="{% url 'users_auth:userpage' %}" class="btn btn-lg btn-outline-danger me-3">Cancelar</a>

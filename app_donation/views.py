@@ -1,9 +1,10 @@
 from django.contrib import messages
+from django.forms.models import inlineformset_factory
 from users_auth.models import Profile
 from django.shortcuts import redirect, render
 from django.db.models.query_utils import Q
-from .forms import SearchRCForm, CustomerServiceForm
-from .models import CustomerService
+from .forms import DonationForm, MaterialForm, SearchRCForm, CustomerServiceForm
+from .models import CustomerService, Donation, Material
 
 # Create your views here.
 def search_rc(request):
@@ -80,3 +81,73 @@ def confirm_ca(request, id):
         return redirect("users_auth:userpage")
 
     return render(request, 'confirm_ca.html', {'ca': ca, 'ca_form': ca_form})
+
+
+def donation(request, id):
+    ca = CustomerService.objects.get(id=id)
+
+    if request.POST:
+        post = request.POST.copy()
+        post['customerService'] = ca
+        post['confirmed'] = ''
+        post['status_donation'] = Donation.STATUS_DONATION_CHOICES[1][0]
+        request.POST = post
+
+        donation_form = DonationForm(request.POST)
+        materials_form_factory = inlineformset_factory(Donation, Material, form=MaterialForm)
+        materials_form = materials_form_factory(request.POST)
+        
+        if donation_form.is_valid() and materials_form.is_valid():
+
+            ca.status_service = CustomerService.STATUS_SERVICE_CHOICES[2][0]
+            ca.save(force_update=True)
+
+            donation = donation_form.save()
+            materials_form.instance = donation
+            materials_form.save()
+
+            return redirect('users_auth:userpage')
+
+    donation_form = DonationForm()
+    materials_form_factory = inlineformset_factory(Donation, Material, form=MaterialForm, extra=3)
+    materials_form = materials_form_factory()
+
+    content = {
+        'ca': ca,
+        'donation_form': donation_form,
+        'materials_form': materials_form
+    }
+    return render(request, 'donation.html', content)
+
+
+def confirm_donation(request, id):
+    ca = CustomerService.objects.get(id=id)
+    donation = Donation.objects.get(customerService=ca.id)
+    materials = Material.objects.filter(donation=donation.id)
+
+    donation_form = DonationForm(request.POST or None, instance=donation)
+
+    if request.POST:
+        if bool(request.POST['confirmed']) == True:
+            donation.confirmed = True
+            donation.status_donation = Donation.STATUS_DONATION_CHOICES[0][0]
+            ca.status_service = CustomerService.STATUS_SERVICE_CHOICES[4][0]
+        
+        elif bool(request.POST['confirmed']) == False:
+            donation.confirmed = False
+            donation.status_donation = Donation.STATUS_DONATION_CHOICES[2][0]
+            ca.status_service = CustomerService.STATUS_SERVICE_CHOICES[3][0]
+
+        donation.save()
+        ca.save()
+        return redirect('users_auth:userpage')
+
+        
+
+    content = {
+        'ca': ca,
+        'materials': materials,
+        'donation_form': donation_form
+    }
+
+    return render(request, 'confirm_donation.html', content)

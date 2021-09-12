@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 {% load bootstrap_filter %}
 
-{% block title %}.:Páagina Usuário{% endblock %}
+{% block title %}{% endblock %}
 
 {% block content %}
 <div class="card-body w-75 mx-auto border-none">
-    <h1 class="text-end">Confirmar Atendimento</h1>
+    <h1 class="text-end">Confirmar Doação</h1>
 </div>
 <form method="POST">
     {% csrf_token %}
     <div class="card w-75 mx-auto">
-        <!--div class="card-header border">
+        <div class="card-header border">
             <h2>Dados do Ponto de Coleta</h2>
         </div>
         <div class="card-body row">
@@ -30,62 +30,57 @@
                 <label class="h3">Email: </label>
                 {{ ca.recipient.email }}
             </div>
-        </div-->
+        </div>
 
         <div class="card-header border">
-            <h2>Dados do Doador</h2>
-        </div>
-        <div class="card-body row">
-            <div class="col-md-6">
-                <label class="h3">Código:</label>
-                {{ ca.requester.code }}
-            </div>
-            <div class="col-md-6">
-                <label class="h3">Nome:</label>
-                {{ ca.requester.first_name }} {{ ca.requester.last_name }}
-            </div>
-            <div class="col-md-6">
-                <label class="h3">Telefone: </label>
-                {{ ca.requester.phone }}
-            </div>
-            <div class="col-md-6">
-                <label class="h3">Email: </label>
-                {{ ca.requester.email }}
-            </div>
-        </div>
-
-        <!--div class="card-header border">
             <h2>Endereço</h2>
         </div>
         <div class="card-body row mx-auto">
             <div class="col-md-12">
                 <h5 class="text-primary fw-bold">{{ ca.address }}</h5>
             </div>
-        </div-->
-
-        <div class="card-header border">
-            <h2>Agendamento</h2>
-        </div>
-        <div class="card-body row mx-auto">
-            <div class="col-md-6 ">
-                <label class="h3">Data:</label><br>
-                {{ ca.date }}
-            </div>
-            <div class="col-md-6">
-                <label class="h3">Hora:</label><br>
-                {{ ca.time }}
-            </div>
         </div>
 
         <div class="card-header border">
-            <h2>Confirmação</h2>
+            <h2>Materiais</h2>
+        </div>
+        <div class="card-body row">
+            <div class="col-md-12">
+            <table class="table table-success table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Qtd</th>
+                        <th scope="col">Pts</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for material in materials %}
+                    <tr>
+                        <th scope="row">{{ material.material_name }}</th>
+                        <td>{{ material.material_type }}</td>
+                        <td>{{ material.amount }}</td>
+                        <td>{{ material.points }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+
+        </div>
+
+        <div class="card-header border">
+            <h2>Confirmação de Doação</h2>
         </div>
         <div class="card-body row">
             <div class="col-md-12 text-center">
                 <label class="h3">Confirmar:</label>
-                {{ ca_form.confirmed|f_class:'form-control w-25 mx-auto text-center' }}
+                {{ donation_form.confirmed|f_class:'form-control w-25 mx-auto text-center' }}
             </div>
         </div>
+
     </div>
     <div class="card-body w-75 mx-auto ps-0">
         <a href="{% url 'users_auth:userpage' %}" class="btn btn-lg btn-outline-danger me-3">Cancelar</a>
