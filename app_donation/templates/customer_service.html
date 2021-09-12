@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load bootstrap_filter %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+<div class="card-body w-75 mx-auto border-none">
+    <h1 class="text-end">Registrar Atendimento</h1>
+</div>
+<form method="POST">
+    {% csrf_token %}
+    <div class="card w-75 mx-auto">
+        <div class="card-header">
+            <h2>Dados do Ponto de Coleta</h2>
+        </div>
+        <div class="card-body row mx-auto">
+            <div class="col-md-6">
+                <label class="h3">Código:</label>
+                {{ profile.code }}
+            </div>
+            <div class="col-md-6">
+                <label class="h3">Razão Social:</label>
+                {{ profile.first_name }} {{ profile.last_name }}
+            </div>
+            <div class="col-md-6">
+                <label class="h3">Telefone: </label>
+                {{ profile.phone }}
+            </div>
+            <div class="col-md-6">
+                <label class="h3">Email: </label>
+                {{ profile.email }}
+            </div>
+        </div>
+
+        <div class="card-header border">
+            <h2>Endereço</h2>
+        </div>
+        <div class="card-body row mx-auto">
+            <div class="col-md-12">
+                <h5 class="text-danger fw-bold">Rua das Estrelas, nº 3131 - Centro, Fortaleza-CE</h5>
+            </div>
+        </div>
+
+        <div class="card-header border">
+            <h2>Agendamento</h2>
+        </div>
+        <div class="card-body row mx-auto">
+            <div class="col-md-6">   
+                <label>Data</label>
+                {{ ca_form.date|f_class:'form-control' }}
+            </div>
+            <div class="col-md-6">
+                <label>Hora</label>
+                {{ ca_form.time|f_class:'form-control' }}
+            </div>
+        </div>
+    </div>
+    <div class="card-body w-75 mx-auto ps-0">
+        <a href="{% url 'app_donation:search_rc' %}" class="btn btn-lg btn-outline-danger me-3">Cancelar</a>
+        <button type="submit" class="btn btn-lg btn-success">Confirmar</button>
+    </div>
+</form>
+{% endblock %}

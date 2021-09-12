@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load bootstrap_filter %}
+
+{% block title %}.:Login{% endblock %}
+
+{% block content %}
+<style>
+    .card {
+        margin-top: 10%;
+        width: 18rem;
+    }
+</style>
+<form method="POST">
+    {% csrf_token %}
+    <div class="card mx-auto px-auto">
+        <div class="card-header h2 text-success">Login</div>
+        <div class="card-body">
+
+            <label>Usuário</label>
+            {{ login_form.user|f_class:'form-control' }}
+            <br>
+            <label>Senha</label>
+            {{ login_form.password|f_class:'form-control' }}
+            <br>
+
+        </div>
+        <button type="submit" class="btn btn-success">Entrar</button>
+    </div>
+</form>
+{% endblock %}
