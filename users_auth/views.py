@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http.response import HttpResponse
 from django.db.models.query_utils import Q
-from .forms import LoginForm
+from .forms import LoginForm, ProfileChangeForm, ProfileCreationForm, ProfileForm
 
 # Create your views here.
 def userpage(request):
@@ -38,3 +38,16 @@ def logout_profile(request):
     logout(request)
     return redirect("users_auth:login")
 
+
+def register_profile(request):
+    if request.POST:
+        profile_form = ProfileForm(request.POST)
+        if profile_form.is_valid():
+            profile_form.save()
+            return redirect('users_auth:login')
+                
+    profile_form = ProfileForm()
+    content = {
+        'profile_form': profile_form
+    }
+    return render(request, 'register.html', content)
