@@ -1,2 +1,9 @@
 django 3.3.2
 psycopg2-2.9.1
+
+# deploy
+django-environ
+whitenoise
+gunicorn
+
+* pip freeze > requirements.txt
